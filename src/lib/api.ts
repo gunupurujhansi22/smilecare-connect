@@ -108,7 +108,7 @@ export async function bookAppointment(input: BookingInput): Promise<string> {
     p_name: input.name,
     p_phone: input.phone,
     p_email: input.email,
-    p_age: input.age,
+    p_age: input.age as number,
     p_gender: input.gender,
     p_doctor_id: input.doctorId,
     p_service: input.service,
