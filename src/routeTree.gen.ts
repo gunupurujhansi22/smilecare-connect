@@ -10,7 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AppointmentRouteImport } from './routes/appointment'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DoctorLoginRouteImport } from './routes/doctor-login'
 import { Route as DoctorsRouteImport } from './routes/doctors'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as DoctorsIndexRouteImport } from './routes/doctors.index'
 import { Route as DoctorsDoctorIdRouteImport } from './routes/doctors.$doctorId'
@@ -22,9 +27,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppointmentRoute = AppointmentRouteImport.update({
+  id: '/appointment',
+  path: '/appointment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorLoginRoute = DoctorLoginRouteImport.update({
+  id: '/doctor-login',
+  path: '/doctor-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorsRoute = DoctorsRouteImport.update({
   id: '/doctors',
   path: '/doctors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -55,7 +85,12 @@ const ServicesServiceSlugRoute = ServicesServiceSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/appointment': typeof AppointmentRoute
+  '/contact': typeof ContactRoute
+  '/doctor-login': typeof DoctorLoginRoute
   '/doctors': typeof DoctorsRouteWithChildren
+  '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRouteWithChildren
   '/doctors/$doctorId': typeof DoctorsDoctorIdRoute
   '/services/$serviceSlug': typeof ServicesServiceSlugRoute
@@ -64,6 +99,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/appointment': typeof AppointmentRoute
+  '/contact': typeof ContactRoute
+  '/doctor-login': typeof DoctorLoginRoute
+  '/gallery': typeof GalleryRoute
   '/doctors/$doctorId': typeof DoctorsDoctorIdRoute
   '/services/$serviceSlug': typeof ServicesServiceSlugRoute
   '/doctors': typeof DoctorsIndexRoute
@@ -72,7 +112,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/appointment': typeof AppointmentRoute
+  '/contact': typeof ContactRoute
+  '/doctor-login': typeof DoctorLoginRoute
   '/doctors': typeof DoctorsRouteWithChildren
+  '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRouteWithChildren
   '/doctors/$doctorId': typeof DoctorsDoctorIdRoute
   '/services/$serviceSlug': typeof ServicesServiceSlugRoute
@@ -83,7 +128,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/appointment'
+    | '/contact'
+    | '/doctor-login'
     | '/doctors'
+    | '/gallery'
     | '/services'
     | '/doctors/$doctorId'
     | '/services/$serviceSlug'
@@ -92,6 +142,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/appointment'
+    | '/contact'
+    | '/doctor-login'
+    | '/gallery'
     | '/doctors/$doctorId'
     | '/services/$serviceSlug'
     | '/doctors'
@@ -99,7 +154,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/appointment'
+    | '/contact'
+    | '/doctor-login'
     | '/doctors'
+    | '/gallery'
     | '/services'
     | '/doctors/$doctorId'
     | '/services/$serviceSlug'
@@ -109,7 +169,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AppointmentRoute: typeof AppointmentRoute
+  ContactRoute: typeof ContactRoute
+  DoctorLoginRoute: typeof DoctorLoginRoute
   DoctorsRoute: typeof DoctorsRouteWithChildren
+  GalleryRoute: typeof GalleryRoute
   ServicesRoute: typeof ServicesRouteWithChildren
 }
 
@@ -122,11 +187,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appointment': {
+      id: '/appointment'
+      path: '/appointment'
+      fullPath: '/appointment'
+      preLoaderRoute: typeof AppointmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor-login': {
+      id: '/doctor-login'
+      path: '/doctor-login'
+      fullPath: '/doctor-login'
+      preLoaderRoute: typeof DoctorLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctors': {
       id: '/doctors'
       path: '/doctors'
       fullPath: '/doctors'
       preLoaderRoute: typeof DoctorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -196,7 +296,12 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AppointmentRoute: AppointmentRoute,
+  ContactRoute: ContactRoute,
+  DoctorLoginRoute: DoctorLoginRoute,
   DoctorsRoute: DoctorsRouteWithChildren,
+  GalleryRoute: GalleryRoute,
   ServicesRoute: ServicesRouteWithChildren,
 }
 export const routeTree = rootRouteImport
