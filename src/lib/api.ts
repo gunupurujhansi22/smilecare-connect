@@ -296,3 +296,95 @@ export async function fetchPatientSummaries(): Promise<PatientSummary[]> {
   }
   return [...byPatient.values()];
 }
+
+/* ---------------- availability ---------------- */
+
+export async function fetchBookedSlots(doctorId: string, date: string): Promise<string[]> {
+  const { data, error } = await supabase.rpc("booked_slots", {
+    p_doctor_id: doctorId,
+    p_date: date,
+  });
+  if (error) throw new Error(error.message);
+  return (data as unknown as string[] | null) ?? [];
+}
+
+/* ---------------- atomic consultation + prescription ---------------- */
+
+export type RecordConsultationInput = {
+  appointmentId: string;
+  problem: string;
+  symptoms: string;
+  clinicalObservation: string;
+  painLevel: number | null;
+  affectedArea: string;
+  toothNumber: string;
+  diagnosis: string;
+  doctorNotes: string;
+  items: PrescriptionItemDraft[];
+  followUpDate: string | null;
+  status: "Draft" | "Issued";
+};
+
+export async function recordConsultation(
+  input: RecordConsultationInput,
+): Promise<{ prescriptionId: string; prescriptionNumber: string }> {
+  const { data, error } = await supabase.rpc("record_consultation", {
+    p_appointment_id: input.appointmentId,
+    p_problem: input.problem,
+    p_symptoms: input.symptoms,
+    p_clinical_observation: input.clinicalObservation,
+    p_pain_level: input.painLevel as number,
+    p_affected_area: input.affectedArea,
+    p_tooth_number: input.toothNumber,
+    p_diagnosis: input.diagnosis,
+    p_doctor_notes: input.doctorNotes,
+    p_items: input.items.map((item) => ({
+      medicine_id: item.medicine_id,
+      medicine_name: item.medicine_name,
+      strength: item.strength,
+      dosage: item.dosage,
+      frequency: item.frequency,
+      duration: item.duration,
+      instructions: item.instructions,
+    })),
+    p_follow_up_date: input.followUpDate as string,
+    p_status: input.status,
+  });
+  if (error) throw new Error(error.message);
+  const row = Array.isArray(data) ? data[0] : data;
+  const result = row as { prescription_id: string; prescription_number: string } | null;
+  if (!result) throw new Error("Prescription could not be recorded.");
+  return { prescriptionId: result.prescription_id, prescriptionNumber: result.prescription_number };
+}
+
+export async function fetchPrescription(id: string): Promise<PrescriptionRow | null> {
+  const { data, error } = await supabase
+    .from("prescriptions")
+    .select(
+      "id, prescription_number, status, created_at, follow_up_date, patients(*), consultations(problem, diagnosis), prescription_items(*)",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return (data as unknown as PrescriptionRow) ?? null;
+}
+
+export async function fetchConsultationForAppointment(appointmentId: string) {
+  const { data, error } = await supabase
+    .from("consultations")
+    .select("*")
+    .eq("appointment_id", appointmentId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function updateDoctorProfile(
+  id: string,
+  patch: Partial<Pick<Doctor, "phone" | "bio" | "availability" | "working_hours" | "qualification" | "specialization">>,
+) {
+  const { error } = await supabase.from("doctors").update(patch).eq("id", id);
+  if (error) throw new Error(error.message);
+}
