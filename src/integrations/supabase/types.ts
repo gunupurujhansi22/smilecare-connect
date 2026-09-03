@@ -449,8 +449,32 @@ export type Database = {
         }
         Returns: string
       }
+      booked_slots: {
+        Args: { p_date: string; p_doctor_id: string }
+        Returns: string[]
+      }
       current_doctor_id: { Args: never; Returns: string }
       next_prescription_number: { Args: never; Returns: string }
+      record_consultation: {
+        Args: {
+          p_affected_area: string
+          p_appointment_id: string
+          p_clinical_observation: string
+          p_diagnosis: string
+          p_doctor_notes: string
+          p_follow_up_date: string
+          p_items: Json
+          p_pain_level: number
+          p_problem: string
+          p_status: string
+          p_symptoms: string
+          p_tooth_number: string
+        }
+        Returns: {
+          prescription_id: string
+          prescription_number: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
