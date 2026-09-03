@@ -333,7 +333,7 @@ export async function recordConsultation(
     p_problem: input.problem,
     p_symptoms: input.symptoms,
     p_clinical_observation: input.clinicalObservation,
-    p_pain_level: input.painLevel,
+    p_pain_level: input.painLevel as number,
     p_affected_area: input.affectedArea,
     p_tooth_number: input.toothNumber,
     p_diagnosis: input.diagnosis,
@@ -347,7 +347,7 @@ export async function recordConsultation(
       duration: item.duration,
       instructions: item.instructions,
     })),
-    p_follow_up_date: input.followUpDate,
+    p_follow_up_date: input.followUpDate as string,
     p_status: input.status,
   });
   if (error) throw new Error(error.message);
