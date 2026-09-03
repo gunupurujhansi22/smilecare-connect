@@ -22,9 +22,9 @@ import { bookAppointment, fetchDoctors, todayISO } from "@/lib/api";
 import { appointmentTypes, serviceNames, timeSlots } from "@/lib/site-data";
 
 export const Route = createFileRoute("/appointment")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    doctor: typeof search["doctor"] === "string" ? search["doctor"] : undefined,
-    service: typeof search["service"] === "string" ? search["service"] : undefined,
+  validateSearch: (search: Record<string, unknown>): { doctor?: string; service?: string } => ({
+    ...(typeof search["doctor"] === "string" ? { doctor: search["doctor"] } : {}),
+    ...(typeof search["service"] === "string" ? { service: search["service"] } : {}),
   }),
   head: () => ({
     meta: [
